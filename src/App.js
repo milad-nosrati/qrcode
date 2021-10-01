@@ -29,9 +29,9 @@ class App extends React.Component {
 
   handleChange(e) {
     if (document.getElementById("skuInput")) {
-      const skuPhrase = document.getElementById("skuInput").value;
+      const skuPhrase = document.getElementById("skuInput").value.toString();
       const searchResult = Products.filter((product) => {
-        return product.SKU == skuPhrase;
+        return product.SKU === skuPhrase;
       });
       console.log(searchResult);
       const parentURLRaw = searchResult[0]["Parent URL"];
