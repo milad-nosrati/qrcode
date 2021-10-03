@@ -1,7 +1,8 @@
 import "./App.css";
 import Products from "./product-url.json";
-import QRCode from "qrcode.react";
+import Qrcode from "./components/qrcode";
 import React from "react";
+import CurrentYear from './components/currentYear';
 
 class App extends React.Component {
   constructor(props) {
@@ -70,36 +71,43 @@ class App extends React.Component {
   render() {
     return (
       <div className="App">
-        <input
-          id="skuInput"
-          className="input"
-          type="text"
-          placeholder="SKU Code"
-          onChange={this.handleChange}
-        />
-        <input
-          id="urlInput"
-          className="input"
-          type="input"
-          placeholder="Url"
-          onChange={this.urlCheck}
-        />
-        <button id="downloadBTN" onClick={this.downloadQR}>
-          {" "}
-          Download QR{" "}
-        </button>
-
-        <QRCode
-          id="qrcodeComponent"
-          value={this.state.qrlink}
-          size={185}
-          className={this.state.qrlink === "" ? "hidden" : "visible"}
-          renderAs="canvas"
-          fgColor="#000000"
-          bgColor="#FFFFFF"
-          includeMargin={true}
-        />
-        {/* <button onClick={this.handleClick}>Generate QR code</button> */}
+        <header className="header">
+          <img
+            src="/images/logo.png"
+            id="main-logo"
+            alt="Payless Flooring logo"
+          />
+        </header>
+        <main className="container">
+          <section className="smallSec">
+            <input
+              id="skuInput"
+              className="input"
+              type="text"
+              placeholder="SKU Code"
+              onChange={this.handleChange}
+            />
+            <input
+              id="urlInput"
+              className="input"
+              type="input"
+              placeholder="Url"
+              onChange={this.urlCheck}
+            />
+          </section>
+          <section className="smallSec">
+            <div className={this.state.qrlink === "" ? "hidden" : "visible"}>
+              <Qrcode qrlink={this.state.qrlink} />
+              <button id="downloadBTN" onClick={this.downloadQR}>
+                {" "}
+                Download QR{" "}
+              </button>
+            </div>
+          </section>
+        </main>
+        <footer className="footer">
+          <span>Copyright © <CurrentYear /> - Milad Norati</span>
+        </footer>
       </div>
     );
   }

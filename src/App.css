@@ -1,34 +1,76 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 .App {
   text-align: center;
   background-color: #282c34;
   min-height: 100vh;
+  max-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
   font-size: calc(10px + 2vmin);
   color: white;
 }
-*{
-  margin: 0.4rem;
+.container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
 }
-.input{
+.input {
   margin: 0.4rem;
   padding: 0.4rem;
   border-radius: 5px;
   min-width: 200px;
-  ;
+  background-color: #282c34;
+  border: solid 1px #999;
+  color: white;
 }
-#downloadBTN{
+#downloadBTN {
   margin: 0.4rem;
   padding: 0.4rem;
-  min-width: 200px;
-  background-color: #322169;
-  color: white
+  background-color: #282c34;
+  color: #ccc;
+  border: 1px solid #999;
+  max-width: 185px;
+  width: 185px;
 }
-.hidden{
-  display: none;;
+#downloadBTN:hover{
+  background-color:white;
+  color:black;
+  cursor: pointer;
 }
-.visible{
+.hidden {
+  display: none;
+}
+.visible {
   display: block;
 }
+.smallSec {
+  width: 250px;
+  height: auto;
+}
+.header {
+  width: 100vw;
+  padding: 0.3rem;
+  display: flex;
+  justify-content: center;
+  background-color: #ccc;
+}
+#main-logo {
+  max-width: 200px;
+}
+.footer {
+  font-size: small;
+  font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
+    "Lucida Sans", Arial, sans-serif;
+  background-color: black;
+  color: white;
+  width: 100%;
+  padding: 0.5rem;
+}
+
