@@ -2,7 +2,7 @@ import "./App.css";
 import Products from "./product-url.json";
 import Qrcode from "./components/qrcode";
 import React from "react";
-import CurrentYear from './components/currentYear';
+import CurrentYear from "./components/currentYear";
 
 class App extends React.Component {
   constructor(props) {
@@ -67,6 +67,8 @@ class App extends React.Component {
       });
     }
   }
+  handleFocus = (event) => event.target.select()
+    
 
   render() {
     return (
@@ -86,13 +88,16 @@ class App extends React.Component {
               type="text"
               placeholder="SKU Code"
               onChange={this.handleChange}
+              onFocus={this.handleFocus}
             />
+            
             <input
               id="urlInput"
               className="input"
               type="input"
               placeholder="Url"
               onChange={this.urlCheck}
+              onFocus={this.handleFocus}
             />
           </section>
           <section className="smallSec">
@@ -106,7 +111,9 @@ class App extends React.Component {
           </section>
         </main>
         <footer className="footer">
-          <span>Copyright © <CurrentYear /> - Milad Norati</span>
+          <span>
+            Copyright © <CurrentYear /> - Milad Norati
+          </span>
         </footer>
       </div>
     );
