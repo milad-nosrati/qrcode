@@ -12,7 +12,7 @@
 *{
   margin: 0.4rem;
 }
-#skuInput{
+.input{
   margin: 0.4rem;
   padding: 0.4rem;
   border-radius: 5px;
@@ -25,4 +25,10 @@
   min-width: 200px;
   background-color: #322169;
   color: white
+}
+.hidden{
+  display: none;;
+}
+.visible{
+  display: block;
 }

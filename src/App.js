@@ -8,12 +8,12 @@ class App extends React.Component {
     super(props);
     this.state = {
       qrlink: "",
-      sku: 'image',
+      sku: "image",
     };
     this.handleChange = this.handleChange.bind(this);
     this.downloadQR = this.downloadQR.bind(this);
+    this.urlCheck = this.urlCheck.bind(this);
   }
-
   downloadQR() {
     const canvas = document.getElementById("qrcodeComponent");
     const pngUrl = canvas
@@ -33,36 +33,73 @@ class App extends React.Component {
       const searchResult = Products.filter((product) => {
         return product.SKU === skuPhrase;
       });
-      console.log(searchResult);
-      const parentURLRaw = searchResult[0]["Parent URL"];
-      const parentURL = parentURLRaw.slice(0, parentURLRaw.indexOf("?"));
+      if (searchResult.length > 0) {
+        const parentURLRaw = searchResult[0]["Parent URL"];
+        const qrlink = parentURLRaw.slice(0, parentURLRaw.indexOf("?"));
+        const sku = searchResult[0].SKU;
 
+        this.setState({
+          qrlink,
+          sku,
+        });
+      } else {
+        this.setState({
+          qrlink: "",
+          sku: "image",
+        });
+      }
+    }
+  }
+  urlCheck(e) {
+    //if(e.code ==='Enter' | e.code ==='NumpadEnter'){
+    if (document.getElementById("urlInput")) {
+      const qrlink = document.getElementById("urlInput").value.toString();
+      const sku = "image";
       this.setState({
-        qrlink: parentURL,
-        sku: searchResult[0].SKU,
+        qrlink,
+        sku,
+      });
+    } else {
+      this.setState({
+        qrlink: "",
+        sku: "image",
       });
     }
   }
+
   render() {
     return (
       <div className="App">
         <input
           id="skuInput"
+          className="input"
           type="text"
           placeholder="SKU Code"
           onChange={this.handleChange}
         />
-        <button id="downloadBTN" onClick={this.downloadQR}> Download QR </button>
-        {/* <button onClick={this.handleClick}>Generate QR code</button> */}
+        <input
+          id="urlInput"
+          className="input"
+          type="input"
+          placeholder="Url"
+          onChange={this.urlCheck}
+        />
+        <button id="downloadBTN" onClick={this.downloadQR}>
+          {" "}
+          Download QR{" "}
+        </button>
+
         <QRCode
           id="qrcodeComponent"
           value={this.state.qrlink}
           size={185}
+          className={this.state.qrlink === "" ? "hidden" : "visible"}
           renderAs="canvas"
           fgColor="#000000"
           bgColor="#FFFFFF"
           includeMargin={true}
         />
+        {/* <button onClick={this.handleClick}>Generate QR code</button> */}
       </div>
     );
   }
