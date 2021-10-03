@@ -1,5 +1,5 @@
 import "./App.css";
-import Products from "./product-url.json";
+import Products from "./data/product-url.json";
 import Qrcode from "./components/qrcode";
 import React from "react";
 import CurrentYear from "./components/currentYear";
