@@ -30,7 +30,7 @@ class App extends React.Component {
 
   handleChange(e) {
     if (document.getElementById("skuInput")) {
-      const skuPhrase = document.getElementById("skuInput").value.toString();
+      const skuPhrase = document.getElementById("skuInput").value.toString().trim();
       const searchResult = Products.filter((product) => {
         return product.SKU.toLowerCase() === skuPhrase.toLowerCase();
       });
@@ -54,7 +54,7 @@ class App extends React.Component {
   urlCheck(e) {
     //if(e.code ==='Enter' | e.code ==='NumpadEnter'){
     if (document.getElementById("urlInput")) {
-      const qrlink = document.getElementById("urlInput").value.toString().trim();
+      const qrlink = document.getElementById("urlInput").value.toString();
       const sku = "image";
       this.setState({
         qrlink,
