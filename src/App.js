@@ -30,7 +30,7 @@ class App extends React.Component {
 
   handleChange(e) {
     if (document.getElementById("skuInput")) {
-      const skuPhrase = document.getElementById("skuInput").value.toString().trim();
+      const skuPhrase = document.getElementById("skuInput").value.toString();
       const searchResult = Products.filter((product) => {
         return product.SKU.toLowerCase() === skuPhrase.toLowerCase();
       });
