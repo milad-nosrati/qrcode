@@ -32,7 +32,7 @@ class App extends React.Component {
     if (document.getElementById("skuInput")) {
       const skuPhrase = document.getElementById("skuInput").value.toString();
       const searchResult = Products.filter((product) => {
-        return product.SKU === skuPhrase;
+        return product.SKU.toLowerCase() === skuPhrase.toLowerCase();
       });
       if (searchResult.length > 0) {
         const parentURLRaw = searchResult[0]["Parent URL"];
