@@ -1,8 +1,8 @@
 import "./App.css";
-import Products from "./data/product-url.json";
 import Qrcode from "./components/qrcode";
 import React from "react";
 import CurrentYear from "./components/currentYear";
+import API from "./Auth/api"
 
 class App extends React.Component {
   constructor(props) {
@@ -10,6 +10,7 @@ class App extends React.Component {
     this.state = {
       qrlink: "",
       sku: "image",
+      product: []
     };
     this.handleChange = this.handleChange.bind(this);
     this.downloadQR = this.downloadQR.bind(this);
@@ -27,28 +28,16 @@ class App extends React.Component {
     downloadLink.click();
     document.body.removeChild(downloadLink);
   }
-
   handleChange(e) {
     if (document.getElementById("skuInput")) {
       const skuPhrase = document.getElementById("skuInput").value.toString();
-      const searchResult = Products.filter((product) => {
-        return product.SKU === skuPhrase;
-      });
-      if (searchResult.length > 0) {
-        const parentURLRaw = searchResult[0]["Parent URL"];
-        const qrlink = parentURLRaw.slice(0, parentURLRaw.indexOf("?"));
-        const sku = searchResult[0].SKU;
-
-        this.setState({
-          qrlink,
-          sku,
-        });
-      } else {
-        this.setState({
-          qrlink: "",
-          sku: "image",
-        });
-      }
+      API.get(`products/?sku=${skuPhrase}`)
+      .then(res => {
+        const product = res.data[0];
+        const sku = product.sku;
+        const qrlink = product.permalink;
+        this.setState({product , sku , qrlink});
+      }) 
     }
   }
   urlCheck(e) {
