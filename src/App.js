@@ -10,7 +10,8 @@ class App extends React.Component {
     this.state = {
       qrlink: "",
       sku: "image",
-      product: []
+      product: [] , 
+      message: ""
     };
     this.handleChange = this.handleChange.bind(this);
     this.downloadQR = this.downloadQR.bind(this);
@@ -36,8 +37,15 @@ class App extends React.Component {
         const product = res.data[0];
         const sku = product.sku;
         const qrlink = product.permalink;
-        this.setState({product , sku , qrlink});
-      }) 
+        const message = ""
+        this.setState({product , sku , qrlink , message});
+      })
+      .catch((err) => {
+        const message = "No Product found";
+        const qrlink ="";
+        const sku = "Image";
+        this.setState({message , sku , qrlink})
+      }); 
     }
   }
   urlCheck(e) {
@@ -45,14 +53,18 @@ class App extends React.Component {
     if (document.getElementById("urlInput")) {
       const qrlink = document.getElementById("urlInput").value.toString();
       const sku = "image";
+      const message = ""
       this.setState({
         qrlink,
         sku,
+        message,
       });
     } else {
+      const message = "URL is not valid";
       this.setState({
         qrlink: "",
         sku: "image",
+        message
       });
     }
   }
@@ -88,6 +100,7 @@ class App extends React.Component {
               onChange={this.urlCheck}
               onFocus={this.handleFocus}
             />
+            <p className="message">{this.state.message}</p>
           </section>
           <section className="smallSec">
             <div className={this.state.qrlink === "" ? "hidden" : "visible"}>
