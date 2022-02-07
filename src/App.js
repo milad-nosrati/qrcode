@@ -1,125 +1,114 @@
 import "./App.css";
 import Qrcode from "./components/qrcode";
-import React from "react";
+import React, { useState } from "react";
 import CurrentYear from "./components/currentYear";
-import API from "./Auth/api"
+import API from "./Auth/api";
 
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      qrlink: "",
-      sku: "image",
-      product: [] , 
-      message: ""
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.downloadQR = this.downloadQR.bind(this);
-    this.urlCheck = this.urlCheck.bind(this);
-  }
-  downloadQR() {
+const App = () => {
+  const [qrlink, setQrlink] = useState("");
+  const [sku, setSku] = useState("image");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const downloadQR = () => {
     const canvas = document.getElementById("qrcodeComponent");
     const pngUrl = canvas
       .toDataURL("image/png")
       .replace("image/png", "image/octet-stream");
+
     let downloadLink = document.createElement("a");
     downloadLink.href = pngUrl;
-    downloadLink.download = `${this.state.sku}.png`;
+    downloadLink.download = `${sku}.png`;
     document.body.appendChild(downloadLink);
     downloadLink.click();
     document.body.removeChild(downloadLink);
-  }
-  handleChange(e) {
-    if (document.getElementById("skuInput")) {
-      const skuPhrase = document.getElementById("skuInput").value.toString();
-      API.get(`products/?sku=${skuPhrase}`)
-      .then(res => {
-        const product = res.data[0];
-        const sku = product.sku;
-        const qrlink = product.permalink;
-        const message = ""
-        this.setState({product , sku , qrlink , message});
-      })
-      .catch((err) => {
-        const message = "No Product found";
-        const qrlink ="";
-        const sku = "Image";
-        this.setState({message , sku , qrlink})
-      }); 
-    }
-  }
-  urlCheck(e) {
-    //if(e.code ==='Enter' | e.code ==='NumpadEnter'){
-    if (document.getElementById("urlInput")) {
-      const qrlink = document.getElementById("urlInput").value.toString();
-      const sku = "image";
-      const message = ""
-      this.setState({
-        qrlink,
-        sku,
-        message,
-      });
+  };
+  const handleChange = (e) => {
+    setIsLoading(true);
+    const skuInputText = e.target.value;
+    setSku(skuInputText);
+    if (skuInputText.length > 14) {
+      const apiQuery = `products/?sku=${skuInputText}`;
+      console.log(apiQuery);
+      API.get(apiQuery)
+        .then((res) => {
+          if (res.data === []) {
+            console.log("Nothing returned.");
+          } else {
+            setQrlink(res.data[0].permalink);
+            setIsLoading(false);
+          }
+        })
+        .catch((err) => {
+          console.log(
+            "Error Getting results from the server, please try again"
+          );
+          console.log(err.response);
+        });
     } else {
-      const message = "URL is not valid";
-      this.setState({
-        qrlink: "",
-        sku: "image",
-        message
-      });
+      setQrlink("");
+      setSku("image");
     }
-  }
-  handleFocus = (event) => event.target.select()
     
+  };
+  const urlCheck = (e) => {
+    setIsLoading(true);
+    //if(e.code ==='Enter' | e.code ==='NumpadEnter'){
+    if (e.target.value) {
+      setQrlink(e.target.value);
+      setSku("image");
+    } else {
+      setQrlink("");
+      setSku("image");
+    }
+    setIsLoading(false);
+  };
+  const handleFocus = (event) => event.target.select();
 
-  render() {
-    return (
-      <div className="App">
-        <header className="header">
-          <img
-            src="/images/logo.png"
-            id="main-logo"
-            alt="Payless Flooring logo"
+  return (
+    <div className="App">
+      <header className="header">
+        <img
+          src="/images/logo.png"
+          id="main-logo"
+          alt="Payless Flooring logo"
+        />
+      </header>
+      <main className="container">
+        <section className="smallSec">
+          <input
+            id="skuInput"
+            className="input"
+            type="text"
+            placeholder="SKU Code"
+            onChange={handleChange}
+            onFocus={handleFocus}
           />
-        </header>
-        <main className="container">
-          <section className="smallSec">
-            <input
-              id="skuInput"
-              className="input"
-              type="text"
-              placeholder="SKU Code"
-              onChange={this.handleChange}
-              onFocus={this.handleFocus}
-            />
-            
-            <input
-              id="urlInput"
-              className="input"
-              type="input"
-              placeholder="Url"
-              onChange={this.urlCheck}
-              onFocus={this.handleFocus}
-            />
-            <p className="message">{this.state.message}</p>
-          </section>
-          <section className="smallSec">
-            <div className={this.state.qrlink === "" ? "hidden" : "visible"}>
-              <Qrcode qrlink={this.state.qrlink} />
-              <button id="downloadBTN" onClick={this.downloadQR}>
-                {" "}
-                Download QR{" "}
-              </button>
-            </div>
-          </section>
-        </main>
-        <footer className="footer">
-          <span>
-            Copyright © <CurrentYear /> - Milad Norati
-          </span>
-        </footer>
-      </div>
-    );
-  }
-}
+
+          <input
+            id="urlInput"
+            className="input"
+            type="input"
+            placeholder="Url"
+            onChange={urlCheck}
+            onFocus={handleFocus}
+          />
+        </section>
+        <section className="smallSec">
+          <div className={qrlink === "" || isLoading ? "hidden" : "visible"}>
+            <Qrcode qrlink={qrlink} />
+            <button id="downloadBTN" onClick={downloadQR}>
+              Download QR
+            </button>
+          </div>
+        </section>
+      </main>
+      <footer className="footer">
+        <span>
+          Copyright © <CurrentYear /> - Milad Nosrati
+        </span>
+      </footer>
+    </div>
+  );
+};
 
 export default App;
