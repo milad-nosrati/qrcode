@@ -48,7 +48,6 @@ const App = () => {
       setQrlink("");
       setSku("image");
     }
-    
   };
   const urlCheck = (e) => {
     setIsLoading(true);
@@ -99,6 +98,11 @@ const App = () => {
             <button id="downloadBTN" onClick={downloadQR}>
               Download QR
             </button>
+          </div>
+          <div className={qrlink === "" ? "hidden" : "visible"}>
+            <div className={ !isLoading ? "hidden" : "visible"}>
+              <div class="lds-dual-ring"></div>
+            </div>
           </div>
         </section>
       </main>
